@@ -28,7 +28,7 @@ export default class HighscoreScene extends Scene {
     this.openingText = this.add.text(
       this.physics.world.bounds.width / 2,
       350,
-      'HERE WILL BE TOP10 SCORES',
+      'HERE WILL BE\n TOP10 SCORES',
       {
         fontFamily: 'monospace',
         fontSize: '25px',

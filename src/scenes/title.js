@@ -6,20 +6,15 @@ export default class TitleScene extends Scene {
   }
   preload() {
     this.load.image("bg", "assets/bg/bg.gif")
-    this.load.audio("titleBgm", "assets/bgm/Menu_music.mp3")
     this.load.audio("begin", "assets/sfx/Menu_Play.mp3")
     this.load.image("title", "assets/images/title.png")
   }
   create() {
     this.start = false
 
-    this.titleMusic = this.sound.add("titleBgm")
     this.beginSound = this.sound.add("begin")
     this.beginSound.setVolume(1.5)
 
-    this.titleMusic.setVolume(0.6)
-    this.titleMusic.loop = true
-    this.titleMusic.play()
 
     this.background = this.add.tileSprite(400, 300, 800, 600, "bg")
 
@@ -63,8 +58,7 @@ export default class TitleScene extends Scene {
       .on("pointerdown", () => {
         this.scene.launch("GameScene"),
         this.scene.stop(),
-        this.beginSound.play(),
-        this.titleMusic.stop()
+        this.beginSound.play()
       })
 
     this.highscoreButton = this.add
