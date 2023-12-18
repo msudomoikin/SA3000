@@ -1,10 +1,10 @@
 import { Scene } from "phaser"
 
  
-export default class HighscoreScene extends Scene {
+export default class AboutScene extends Scene {
 
   constructor() {
-    super({ key: "HighscoreScene", active: false })
+    super({ key: "AboutScene", active: false })
   }
   preload() {
     this.load.image('bg', 'assets/bg/bg.gif')
@@ -27,11 +27,15 @@ export default class HighscoreScene extends Scene {
     
     this.openingText = this.add.text(
       this.physics.world.bounds.width / 2,
-      350,
-      'HERE WILL BE\n TOP10 SCORES',
+      150,
+      `
+      Music and sounds by\n 4AF3\n\n
+      Everything else by \n Matvey Sudomoykin\n\n
+      Thanks for playing!
+      `,
       {
         fontFamily: 'monospace',
-        fontSize: '25px',
+        fontSize: '15px',
         fill: '#fff',
         align: 'center'
       }

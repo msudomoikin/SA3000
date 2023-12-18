@@ -41,38 +41,38 @@ export default class GameScene extends Scene {
     this.load.audio("hit3", "assets/sfx/Crash_4.mp3");
   }
   create() {
-    let hit1, hit2, hit3
-    this.background = this.add.tileSprite(400, 300, 800, 600, "bg")
+    let hit1, hit2, hit3;
+    this.background = this.add.tileSprite(400, 300, 800, 600, "bg");
 
-    this.engineSound = this.sound.add("engineSfx")
-    this.engineSound.setVolume(0.5)
+    this.engineSound = this.sound.add("engineSfx");
+    this.engineSound.setVolume(0.5);
 
-    this.gameMusic = this.sound.add("gameBgm")
-    this.gameMusic.setVolume(0.6)
+    this.gameMusic = this.sound.add("gameBgm");
+    this.gameMusic.setVolume(0.6);
     // this.gameMusic.play()
 
-    this.hit1 = this.sound.add("hit1")
-    this.hit1.setVolume(0.3)
+    this.hit1 = this.sound.add("hit1");
+    this.hit1.setVolume(0.3);
 
-    this.hit2 = this.sound.add("hit2")
-    this.hit2.setVolume(0.3)
+    this.hit2 = this.sound.add("hit2");
+    this.hit2.setVolume(0.3);
 
-    this.hit3 = this.sound.add("hit3")
-    this.hit3.setVolume(0.3)
+    this.hit3 = this.sound.add("hit3");
+    this.hit3.setVolume(0.3);
 
-    this.paddleHit = this.sound.add("paddleHit")
-    this.paddleHit.setVolume(0.3)
+    this.paddleHit = this.sound.add("paddleHit");
+    this.paddleHit.setVolume(0.3);
 
     // Создаем текстовый объект в верхнем левом углу экрана
     this.scoreText = this.add.text(16, 16, "", {
       fontFamily: "monospace",
       fontSize: "14px",
       fill: "#fff",
-    })
+    });
 
     // Обновляем текстовый объект счетом из ScoreScene
-    let scoreScene = this.scene.get("ScoreScene")
-    this.scoreText.setText("Score: " + scoreScene.getScore())
+    let scoreScene = this.scene.get("ScoreScene");
+    this.scoreText.setText("Score: " + scoreScene.getScore());
 
     this.openingText = this.add.text(200, 200, "Hit SPACE to Start.", {
       fontFamily: "monospace",
@@ -80,12 +80,17 @@ export default class GameScene extends Scene {
       fill: "#fff",
     });
 
-    this.gameOverText = this.add.text(200, 200, "Game Over!", {
-      fontFamily: "monospace",
-      fontSize: "25px",
-      fill: "#fff",
-      align: "center",
-    });
+    this.gameOverText = this.add.text(
+      this.physics.world.bounds.width / 2,
+      200,
+      "Game Over!",
+      {
+        fontFamily: "monospace",
+        fontSize: "25px",
+        fill: "#fff",
+        align: "center",
+      }
+    );
 
     this.playerWonText = this.add.text(
       this.physics.world.bounds.width / 2,
@@ -107,7 +112,7 @@ export default class GameScene extends Scene {
     this.player = this.physics.add
       .image(
         150, // x position
-        450, // y position
+        470, // y position
         "paddle" // key of image for the sprite
       )
       .setInteractive({ draggable: true })
@@ -128,41 +133,97 @@ export default class GameScene extends Scene {
         // ...
       });
 
-    this.violetBricks = this.physics.add.group({
+    this.lgEnemies = this.physics.add.group({
       key: "lg_enemy",
       immovable: true,
-      repeat: 2,
+      repeat: 4,
       setXY: {
-        x: 65,
+        x: 95,
         y: 60,
-        stepX: 85,
+        stepX: 35,
         stepY: 0,
       },
-      setScale: { x: 0.6, y: 0.6 },
+      setScale: { x: 0.4, y: 0.4 },
     });
 
-    this.redBricks = this.physics.add.group({
+    this.midEnemies = this.physics.add.group({
       key: "md_enemy",
       immovable: true,
       repeat: 3,
       setXY: {
-        x: 45,
+        x: 75,
         y: 150,
-        stepX: 85,
+        stepX: 35,
       },
-      setScale: { x: 0.8, y: 0.7 },
+      setScale: { x: 0.5, y: 0.2 },
     });
 
-    this.yellowBricks = this.physics.add.group({
+    this.smEnemies = this.physics.add.group({
       key: "sm_enemy",
       immovable: true,
-      repeat: 3,
+      repeat: Math.random() * 15,
       setXY: {
-        x: 65,
-        y: 220,
-        stepX: 65,
+        x: 125,
+        y: 180,
+        stepX: 0,
+        stepY: 0,
       },
-      setScale: { x: 0.9, y: 1 },
+      setScale: { x: 0.4, y: 0.5 },
+    })
+
+    this.lgEnemies.children.entries.forEach((child) => {
+      this.tweens.add({
+        targets: child,
+        ease: "Elastic.InOut",
+        x: { start: child.x, to: Math.random() * 100 },
+        duration: 1280,
+        delay: Math.random() * 1000,
+        yoyo: true,
+        repeat: -1,
+        onComplete: () => {},
+      });
+    });
+
+    this.lgEnemies.children.entries.forEach((child) => {
+      this.tweens.add({
+        targets: child,
+        y: { start: child.y, to: 100 },
+        duration: 380,
+        delay: Math.random() * 123,
+        yoyo: true,
+        repeat: -1,
+        onComplete: () => {},
+      });
+    });
+
+    this.smEnemies.children.entries.forEach((child) => {
+      this.tweens.add({
+        targets: child,
+        ease: "Elastic.InOut",
+        x: child.x + Math.random() * 100,
+        y: child.y + Math.random() * 100,
+        angle: Math.random() * 1000,
+        duration: 680,
+        delay: 70,
+        yoyo: true,
+        repeat: -1,
+        onComplete: () => {},
+      });
+    });
+
+    this.midEnemies.children.entries.forEach((child) => {
+      this.tweens.add({
+        targets: child,
+        ease: "Bounce.InOut",
+        x: child.x + Math.random() * 100,
+        y: child.y + Math.random() * 100,
+        angle: Math.random() * 1000,
+        duration: 880,
+        delay: 20,
+        yoyo: true,
+        repeat: -1,
+        onComplete: () => {},
+      });
     });
 
     this.ball = this.physics.add
@@ -199,21 +260,21 @@ export default class GameScene extends Scene {
 
     this.physics.add.collider(
       this.ball,
-      this.violetBricks,
+      this.lgEnemies,
       this.hitBrick,
       null,
       this
     );
     this.physics.add.collider(
       this.ball,
-      this.yellowBricks,
+      this.smEnemies,
       this.hitBrick,
       null,
       this
     );
     this.physics.add.collider(
       this.ball,
-      this.redBricks,
+      this.midEnemies,
       this.hitBrick,
       null,
       this
@@ -233,8 +294,11 @@ export default class GameScene extends Scene {
     function stopTouch(pointer, player, evnt) {
       evnt.stopPropagation();
     }
-    this.background.tilePositionY += 0.5;
+
+    this.background.tilePositionY -= 0.5;
+
     const pointer = this.game.input.activePointer;
+
     let restartButton = this.add.text(
       this.physics.world.bounds.width / 2,
       this.physics.world.bounds.height / 2 + 100,
@@ -246,6 +310,24 @@ export default class GameScene extends Scene {
         align: "center",
       }
     );
+
+    let nextButton = this.add.text(
+      this.physics.world.bounds.width / 2,
+      this.physics.world.bounds.height / 2 + 100,
+      "NEXT",
+      {
+        fill: "#FFF",
+        fontSize: "25px",
+        fontFamily: "monospace",
+        align: "center",
+      }
+    );
+
+    nextButton
+      .setVisible(false)
+      .setOrigin(0.5)
+      .setInteractive()
+      .on("pointerdown", () => this.nextLevel(this));
 
     restartButton
       .setVisible(false)
@@ -273,8 +355,9 @@ export default class GameScene extends Scene {
       this.player.disableBody(true, true);
       this.gameStarted = false;
       // this.scene.stop()
-      restartButton.setOrigin(0.5);
-      restartButton.setVisible(true);
+
+      nextButton.setOrigin(0.5);
+      nextButton.setVisible(true);
     } else {
       // TODO: Logic for regular game time
       const pointer = this.sys.game.input.activePointer;
@@ -298,49 +381,48 @@ export default class GameScene extends Scene {
         if (this.cursors.space.isDown || pointer.isDown) {
           this.gameStarted = true;
           this.ball.setVelocityY(-50);
-          // levelStartPhrase.play()
           this.ball.setVelocityY(-350);
           this.openingText.setVisible(false);
           this.startButton.setVisible(false);
           const totalBricks =
-            this.violetBricks.countActive() +
-            this.yellowBricks.countActive() +
-            this.redBricks.countActive()
+            this.lgEnemies.countActive() +
+            this.smEnemies.countActive() +
+            this.midEnemies.countActive();
         }
       }
     }
   }
 
   isGameOver(world) {
-    return this.ball.body.y > world.bounds.height
+    return this.ball.body.y > world.bounds.height;
   }
 
   isWon() {
     return (
-      this.violetBricks.countActive() +
-        this.yellowBricks.countActive() +
-        this.redBricks.countActive() ===
+      this.lgEnemies.countActive() +
+        this.smEnemies.countActive() +
+        this.midEnemies.countActive() ===
       0
-    )
+    );
   }
 
   hitBrick(ball, brick) {
-    let hits = [this.hit1, this.hit2, this.hit3]
-    const random = Math.floor(Math.random() * hits.length)
-    hits[random].play()
+    let hits = [this.hit1, this.hit2, this.hit3];
+    const random = Math.floor(Math.random() * hits.length);
+    hits[random].play();
 
-    let scoreScene = this.scene.get("ScoreScene")
-    scoreScene.increaseScore(10)
-    this.scoreText.setText("Score: " + scoreScene.getScore())
+    let scoreScene = this.scene.get("ScoreScene");
+    scoreScene.increaseScore(10);
+    this.scoreText.setText("Score: " + scoreScene.getScore());
 
     if (ball.body.velocity.x === 0) {
-      brick.disableBody(true, true)
+      brick.disableBody(true, true);
 
-      let randNum = Math.random()
+      let randNum = Math.random();
       if (randNum >= 0.5) {
-        ball.body.setVelocityX(17)
+        ball.body.setVelocityX(17);
       } else {
-        ball.body.setVelocityX(-17)
+        ball.body.setVelocityX(-17);
       }
     }
 
@@ -371,8 +453,8 @@ export default class GameScene extends Scene {
 
   hitPlayer(ball, player) {
     // Increase the velocity of the ball after it bounces
-    this.paddleHit.play()
-    ball.setVelocityY(ball.body.velocity.y - 5)
+    this.paddleHit.play();
+    ball.setVelocityY(ball.body.velocity.y - 5);
 
     this.tweens.add({
       targets: ball,
@@ -385,21 +467,43 @@ export default class GameScene extends Scene {
       onComplete: () => {},
     });
 
-    let newXVelocity = Math.abs(ball.body.velocity.x) + 55
+    let diff = 0;
+    let newXVelocity = Math.abs(ball.body.velocity.x) + 15;
+
     // If the ball is to the left of the player, ensure the X-velocity is negative
     if (ball.x < player.x) {
-      ball.setVelocityX(-newXVelocity)
+      // Если мяч слева от площадки
+      diff = player.x - ball.x;
+      ball.setVelocityX(-10 * diff);
+    } else if (ball.x > player.x) {
+      // Если мяч справа от площадки
+      diff = ball.x - player.x;
+      ball.setVelocityX(10 * diff);
     } else {
-      ball.setVelocityX(newXVelocity)
+      // Мяч попал в центр площадки, добавить случайное отклонение
+      ball.setVelocityX(2 + Math.random() * 8);
     }
   }
 
   restartGame(scene) {
+    let scoreScene = this.scene.get("ScoreScene")
+    scoreScene.resetScore()
+    let soundScene = this.scene.get("SoundScene")
 
-
+    soundScene.restartBgm()
     // this.gameMusic.stop()
-    scene.registry.destroy() // destroy registry
-    scene.events.off() // disable all active events
-    scene.scene.start() // restart current scene
+    scene.registry.destroy(); // destroy registry
+    scene.events.off(); // disable all active events
+    scene.scene.start(); // restart current scene
+  }
+
+  nextLevel(scene) {
+    scene.registry.destroy(); // destroy registry
+    scene.events.off(); // disable all active events
+    scene.scene.start(); // restart current scene
+    this.ball.setVelocityY(-50);
+    this.ball.setVelocityY(-350);
+    this.openingText.setVisible(false);
+    this.startButton.setVisible(false);
   }
 }

@@ -10,11 +10,12 @@ export default class TitleScene extends Scene {
     this.load.image("title", "assets/images/title.png")
   }
   create() {
+    let soundScene = this.scene.get("SoundScene")
+
     this.start = false
 
     this.beginSound = this.sound.add("begin")
     this.beginSound.setVolume(1.5)
-
 
     this.background = this.add.tileSprite(400, 300, 800, 600, "bg")
 
@@ -36,6 +37,7 @@ export default class TitleScene extends Scene {
       this.openingText.setVisible(false)
       this.beginButton.setVisible(true)
       this.highscoreButton.setVisible(true)
+      this.aboutButton.setVisible(true)
       this.start = true
     })
 
@@ -43,7 +45,7 @@ export default class TitleScene extends Scene {
       this.physics.world.bounds.width / 2, // x position
       200, // y position
       "title" // key of image for the sprite
-    )
+    );
 
     this.beginButton = this.add
       .text(this.physics.world.bounds.width / 2, 350, "START", {
@@ -57,6 +59,24 @@ export default class TitleScene extends Scene {
       .setVisible(false)
       .on("pointerdown", () => {
         this.scene.launch("GameScene"),
+        this.scene.stop(),
+        this.beginSound.play(),
+
+        soundScene.playBgm()
+      })
+
+    this.aboutButton = this.add
+      .text(this.physics.world.bounds.width / 2, 450, "ABOUT", {
+        fill: "#FFF",
+        fontSize: "25px",
+        align: "center",
+        fontFamily: "monospace",
+      })
+      .setOrigin(0.5)
+      .setInteractive()
+      .setVisible(false)
+      .on("pointerdown", () => {
+        this.scene.launch("AboutScene"),
         this.scene.stop(),
         this.beginSound.play()
       })
@@ -83,7 +103,7 @@ export default class TitleScene extends Scene {
   }
   update() {
     if (this.start) {
-      this.background.tilePositionY += 0.5
+      this.background.tilePositionY -= 0.5;
     }
   }
 }

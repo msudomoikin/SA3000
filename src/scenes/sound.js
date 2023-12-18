@@ -31,4 +31,13 @@ export default class SoundScene extends Scene {
     this.gameMusic.setVolume(.6)
     this.gameMusic.play()
   }
+  stopTitleMusic() {
+    this.titleMusic.stop()
+  }
+  restartBgm() {
+    console.log('sound scene restartBgm started')
+    this.gameMusic.stop()
+    this.gameMusic.setVolume(.6)
+    this.gameMusic.play()
+  }
 }

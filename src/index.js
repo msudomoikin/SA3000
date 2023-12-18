@@ -5,6 +5,8 @@ import GameBossScene from "./scenes/gameBoss"
 import HighscoreScene from "./scenes/highscore"
 import SoundScene from "./scenes/sound"
 import ScoreScene from "./scenes/score"
+import AboutScene from "./scenes/about"
+
 
 
  
@@ -19,13 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
       autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [
-      TitleScene, GameScene, GameBossScene, HighscoreScene, SoundScene, ScoreScene,
+      TitleScene, GameScene, GameBossScene, HighscoreScene, SoundScene, ScoreScene, AboutScene
     ],
     physics: {
       default: 'arcade',
       arcade: {
         gravity: false,
-        debug: true,
+        debug: false,
       },
     }
   })
